@@ -8,11 +8,14 @@ from google.cloud import dialogflow
 
 def callback_bot(event, vk_api):
     response_message = detect_intent_texts("technicalsupportassistant-uwyu", event.user_id, event.text)
-    vk_api.messages.send(
-        user_id=event.user_id,
-        message=response_message,
-        random_id=random.randint(1, 1000)
-    )
+    try:
+        vk_api.messages.send(
+            user_id=event.user_id,
+            message=response_message,
+            random_id=random.randint(1, 1000)
+        )
+    except:
+        pass
 
 
 def detect_intent_texts(project_id: str, session_id: str, text) -> str:
@@ -23,7 +26,8 @@ def detect_intent_texts(project_id: str, session_id: str, text) -> str:
     response = session_client.detect_intent(
             request={"session": session, "query_input": query_input}
         )
-    return response.query_result.fulfillment_text
+    if not response.query_result.intent.is_fallback:
+        return response.query_result.fulfillment_text
 
 
 if __name__ == "__main__":
