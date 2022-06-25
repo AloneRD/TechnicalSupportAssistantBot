@@ -3,6 +3,7 @@ from typing import NoReturn
 from dotenv import load_dotenv
 from google.cloud import dialogflow
 import argparse
+import time
 
 
 def main():
@@ -27,7 +28,7 @@ def load_training_phrases_file(training_phrases_file_path: str) -> json:
         return training_phrases_file
 
 
-def create_intent(project_id: str, display_name: str, questions: list, answer: list) -> NoReturn:
+def create_intent(project_id: str, display_name: str, questions: list, answer: str) -> NoReturn:
     intents_client = dialogflow.IntentsClient()
     parent = dialogflow.AgentsClient.agent_path(project_id)
     training_phrases = []
@@ -36,7 +37,7 @@ def create_intent(project_id: str, display_name: str, questions: list, answer: l
         training_phrase = dialogflow.Intent.TrainingPhrase(parts=[part])
         training_phrases.append(training_phrase)
 
-    text = dialogflow.Intent.Message.Text(text=answer)
+    text = dialogflow.Intent.Message.Text(text=[answer])
     message = dialogflow.Intent.Message(text=text)
 
     intent = dialogflow.Intent(display_name=display_name, training_phrases=training_phrases, messages=[message])
