@@ -3,14 +3,27 @@ import os
 import random
 from dotenv import load_dotenv
 from vk_api.longpoll import VkLongPoll, VkEventType
+from google.cloud import dialogflow
 
 
-def echo(event, vk_api):
+def callback_bot(event, vk_api):
+    response_message = detect_intent_texts("technicalsupportassistant-uwyu", event.user_id, event.text)
     vk_api.messages.send(
         user_id=event.user_id,
-        message=event.text,
+        message=response_message,
         random_id=random.randint(1, 1000)
     )
+
+
+def detect_intent_texts(project_id: str, session_id: str, text) -> str:
+    session_client = dialogflow.SessionsClient()
+    session = session_client.session_path(project_id, session_id)
+    text_input = dialogflow.TextInput(text=text, language_code="ru")
+    query_input = dialogflow.QueryInput(text=text_input)
+    response = session_client.detect_intent(
+            request={"session": session, "query_input": query_input}
+        )
+    return response.query_result.fulfillment_text
 
 
 if __name__ == "__main__":
@@ -21,4 +34,4 @@ if __name__ == "__main__":
     longpoll = VkLongPoll(vk_session)
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            echo(event, vk_api)
+            callback_bot(event, vk_api)
