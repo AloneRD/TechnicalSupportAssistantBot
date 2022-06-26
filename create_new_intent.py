@@ -3,7 +3,6 @@ from typing import NoReturn
 from dotenv import load_dotenv
 from google.cloud import dialogflow
 import argparse
-import time
 
 
 def main():
