@@ -9,7 +9,7 @@ import telegram
 import logging
 from google_dialog_flow_api import detect_intent_texts
 
-logger = logging.getLogger("CheckBot")
+logger = logging.getLogger("TGBot")
 
 
 class TelegramLogsHandler(logging.Handler):
@@ -29,10 +29,14 @@ def start_callback(update, context) -> NoReturn:
 
 
 def responds_to_user(update, context) -> NoReturn:
-    message_text = update.message.text
-    chat_id = update.message.chat.id
-    response_message = detect_intent_texts(project_id, chat_id, message_text, 'tg')
-    update.message.reply_text(response_message)
+    try:
+        message_text = update.message.text
+        chat_id = update.message.chat.id
+        print(1/0)
+        response_message = detect_intent_texts(project_id, chat_id, message_text, 'tg')
+        update.message.reply_text(response_message)
+    except:
+        logger.exception("Бот упал с ошибкой")
 
 
 def main():
