@@ -32,7 +32,6 @@ def responds_to_user(update, context) -> NoReturn:
     try:
         message_text = update.message.text
         chat_id = update.message.chat.id
-        print(1/0)
         response_message = detect_intent_texts(project_id, chat_id, message_text, 'tg')
         update.message.reply_text(response_message)
     except:

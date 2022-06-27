@@ -3,7 +3,6 @@ import os
 import random
 from dotenv import load_dotenv
 from vk_api.longpoll import VkLongPoll, VkEventType
-from google.cloud import dialogflow
 from google_dialog_flow_api import detect_intent_texts
 
 
