@@ -28,17 +28,19 @@ def start_callback(update, context) -> NoReturn:
     update.message.reply_text("Здравствуйте")
 
 
-def echo(update, context) -> NoReturn:
+def responds_to_user(update, context) -> NoReturn:
     message_text = update.message.text
     chat_id = update.message.chat.id
-    response_message = detect_intent_texts("technicalsupportassistant-uwyu", chat_id, message_text, 'tg')
+    response_message = detect_intent_texts(project_id, chat_id, message_text, 'tg')
     update.message.reply_text(response_message)
 
 
 def main():
     load_dotenv()
+    global project_id
     tg_token = os.getenv("TELEGRAM_TOKEN")
     chat_id = os.environ.get("TG_CHAT_ID")
+    project_id = os.getenv("PROJECT_ID_DIALOG_FLOW")
 
     logger.setLevel(logging.INFO)
     logger.addHandler(TelegramLogsHandler(tg_token, chat_id))
@@ -47,7 +49,7 @@ def main():
     dispacher = updater.dispatcher
 
     dispacher.add_handler(CommandHandler("start", start_callback))
-    dispacher.add_handler(MessageHandler(Filters.text, echo))
+    dispacher.add_handler(MessageHandler(Filters.text, responds_to_user))
 
     updater.start_polling()
 
