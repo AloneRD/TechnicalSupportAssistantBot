@@ -14,10 +14,10 @@ def main():
     args = parser.parse_args()
 
     training_phrases_file = load_training_phrases_file(args.training_phrases_file_path)
+
     for training_phrases in training_phrases_file:
+        questions, answer = training_phrases_file[training_phrases].values()
         intent_title = training_phrases
-        questions = training_phrases_file[training_phrases]['questions']
-        answer = training_phrases_file[training_phrases]['answer']
         create_intent(args.project_id, intent_title, questions, answer)
 
 
