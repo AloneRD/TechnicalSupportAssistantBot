@@ -21,7 +21,7 @@ def main():
         create_intent(args.project_id, intent_title, questions, answer)
 
 
-def load_training_phrases_file(training_phrases_file_path: str) -> json:
+def load_training_phrases_file(training_phrases_file_path: str) -> dict:
     with open(training_phrases_file_path, 'r', encoding='utf-8') as file:
         training_phrases_file = json.load(file)
         return training_phrases_file
