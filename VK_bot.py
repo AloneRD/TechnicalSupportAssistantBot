@@ -8,15 +8,13 @@ from functools import partial
 
 
 def responds_to_user(event, vk_api, project_id):
-    response_message = detect_intent_texts(project_id, event.user_id, event.text, "vk")
-    try:
+    response_message, fallback = detect_intent_texts(project_id, event.user_id, event.text)
+    if not fallback:
         vk_api.messages.send(
             user_id=event.user_id,
             message=response_message,
             random_id=random.randint(1, 1000)
         )
-    except:
-        pass
 
 
 if __name__ == "__main__":
@@ -28,4 +26,7 @@ if __name__ == "__main__":
     longpoll = VkLongPoll(vk_session)
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            responds_to_user(event, vk_api, project_id)
+            try:
+                responds_to_user(event, vk_api, project_id)
+            except:
+                pass

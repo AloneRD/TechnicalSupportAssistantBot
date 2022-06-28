@@ -33,7 +33,7 @@ def responds_to_user(update, context, project_id:str) -> NoReturn:
     try:
         message_text = update.message.text
         chat_id = update.message.chat.id
-        response_message = detect_intent_texts(project_id, chat_id, message_text, 'tg')
+        response_message, fallback = detect_intent_texts(project_id, chat_id, message_text)
         update.message.reply_text(response_message)
     except:
         logger.exception("Бот упал с ошибкой")
