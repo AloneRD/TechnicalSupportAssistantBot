@@ -17,6 +17,7 @@
    - **VK_TOKEN** токен для доступа к API ВКонтакте
    - **TELEGRAM_TOKEN** токен к вашему телеграмм боту
    - **TG_CHAT_ID** id чата, в который бот будет посылать логи
+   - **PROJECT_ID_DIALOG_FLOW** id вашего проекта в DialogFlow
    - **GOOGLE_APPLICATION_CREDENTIALS** json ключ для доступа к API Google [см.тут](https://cloud.google.com/docs/authentication/getting-started)
 7. запустить бота :
    * Для запуска телеграмм бота **.\bot.py**
