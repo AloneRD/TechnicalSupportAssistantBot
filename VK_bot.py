@@ -4,9 +4,10 @@ import random
 from dotenv import load_dotenv
 from vk_api.longpoll import VkLongPoll, VkEventType
 from google_dialog_flow_api import detect_intent_texts
+from functools import partial
 
 
-def responds_to_user(event, vk_api):
+def responds_to_user(event, vk_api, project_id):
     response_message = detect_intent_texts(project_id, event.user_id, event.text, "vk")
     try:
         vk_api.messages.send(
@@ -20,7 +21,6 @@ def responds_to_user(event, vk_api):
 
 if __name__ == "__main__":
     load_dotenv()
-    global project_id
     vk_token = os.getenv("VK_TOKEN")
     project_id = os.getenv("PROJECT_ID_DIALOG_FLOW")
     vk_session = vk.VkApi(token=vk_token)
@@ -28,4 +28,4 @@ if __name__ == "__main__":
     longpoll = VkLongPoll(vk_session)
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            responds_to_user(event, vk_api)
+            responds_to_user(event, vk_api, project_id)

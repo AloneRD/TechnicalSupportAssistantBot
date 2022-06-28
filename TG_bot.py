@@ -8,6 +8,7 @@ from telegram.ext import Filters
 import telegram
 import logging
 from google_dialog_flow_api import detect_intent_texts
+from functools import partial
 
 logger = logging.getLogger("TGBot")
 
@@ -28,7 +29,7 @@ def start_callback(update, context) -> NoReturn:
     update.message.reply_text("Здравствуйте")
 
 
-def responds_to_user(update, context) -> NoReturn:
+def responds_to_user(update, context, project_id:str) -> NoReturn:
     try:
         message_text = update.message.text
         chat_id = update.message.chat.id
@@ -40,7 +41,6 @@ def responds_to_user(update, context) -> NoReturn:
 
 def main():
     load_dotenv()
-    global project_id
     tg_token = os.getenv("TELEGRAM_TOKEN")
     chat_id = os.environ.get("TG_CHAT_ID")
     project_id = os.getenv("PROJECT_ID_DIALOG_FLOW")
@@ -52,7 +52,7 @@ def main():
     dispacher = updater.dispatcher
 
     dispacher.add_handler(CommandHandler("start", start_callback))
-    dispacher.add_handler(MessageHandler(Filters.text, responds_to_user))
+    dispacher.add_handler(MessageHandler(Filters.text, partial(responds_to_user, project_id=project_id)))
 
     updater.start_polling()
 
